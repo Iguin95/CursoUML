@@ -8,8 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.cursouml.domain.Categoria;
+import com.cursouml.domain.Cidade;
+import com.cursouml.domain.Estado;
 import com.cursouml.domain.Produto;
 import com.cursouml.repositories.CategoriaRepository;
+import com.cursouml.repositories.CidadeRepository;
+import com.cursouml.repositories.EstadoRepository;
 import com.cursouml.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -20,6 +24,12 @@ public class CursoumlApplication implements CommandLineRunner{
 	
 	@Autowired
 	ProdutoRepository produtoRepository;
+	
+	@Autowired
+	EstadoRepository estadoRepository;
+	
+	@Autowired
+	CidadeRepository cidadeRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursoumlApplication.class, args);
@@ -43,6 +53,18 @@ public class CursoumlApplication implements CommandLineRunner{
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+		
+		Estado est1 = new Estado(null, "Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
+		
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2, c3));
+		estadoRepository.saveAll(Arrays.asList(est1, est2));
+		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
 	}	
 }
