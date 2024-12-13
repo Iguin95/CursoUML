@@ -1,4 +1,4 @@
-package com.cursouml.domain;
+package com.cursouml.domain.enums;
 
 public enum TipoCliente {
 

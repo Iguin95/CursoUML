@@ -7,19 +7,34 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.cursouml.domain.enums.TipoCliente;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
 public class Cliente implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 		
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
-	private Integer tipoCliente; /*internamente, o tipo do cliente vai ser armazenado como um inteiro
-	porém, através do construtor, externamente ele será do tipo Enumerado*/
+	private Integer tipoCliente; 
 	
+	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
+	@ElementCollection
+	@CollectionTable(name = "tb_telefone") //dessa forma, a entidade fraca é criada cmo tabela no Tb sem a nessecidade de criar uma entidade própria
 	private Set<String> telefones = new HashSet<>(); //entidade fraca 
 	
 	public Cliente() {
