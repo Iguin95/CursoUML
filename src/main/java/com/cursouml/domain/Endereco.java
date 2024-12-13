@@ -3,6 +3,8 @@ package com.cursouml.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,15 +26,14 @@ public class Endereco implements Serializable{
 	private String bairro;
 	private String cep;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
 	@ManyToOne
 	@JoinColumn(name = "cidade_id")
-	private Cidade cidade; /*associação direcionada; os endereços conhecem as cidades que tem,
-	mas as cidades não conhecem os seus endereços, por isso, a associação foi feita somente
-	na classe Endereco, e na classe Cidade, ficou sem associação com Endereco*/
+	private Cidade cidade;
 	
 	public Endereco() {
 	}

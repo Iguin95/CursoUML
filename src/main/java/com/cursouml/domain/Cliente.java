@@ -34,8 +34,8 @@ public class Cliente implements Serializable{
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	@ElementCollection
-	@CollectionTable(name = "tb_telefone") //dessa forma, a entidade fraca é criada cmo tabela no Tb sem a nessecidade de criar uma entidade própria
-	private Set<String> telefones = new HashSet<>(); //entidade fraca 
+	@CollectionTable(name = "tb_telefone")
+	private Set<String> telefones = new HashSet<>(); 
 	
 	public Cliente() {
 	}
