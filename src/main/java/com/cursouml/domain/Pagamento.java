@@ -7,26 +7,26 @@ import com.cursouml.domain.enums.EstadoPagamento;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Pagamento implements Serializable{
-	
+@Inheritance(strategy = InheritanceType.JOINED) //Anotação para definir a super classe e criar as tabelas no DB...
+public abstract class Pagamento implements Serializable{ //o tipo JOINED faz com que cada classe, super e subs, tenha sua propria tabela no DB(melhor configuração para quando há muitos atributos nas subclasses)...
+	//já a SINGLE_TABLE faz ter apenas uma tabela, e dependendo da herança que escolher, os atributos da que não foi escolhida recebe todos null no DB(melhor configuração para quando há poucos atributos nas subclasses)
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private Integer id;
-	private EstadoPagamento estadoPagamento;
+	private Integer estadoPagamento;
 	
 	@OneToOne
 	@JoinColumn(name = "pedido_id")
-	@MapsId //isso garante que vai ser o mesmo id
-	private Pedido pedido;/*como é uma relação de um p/ um, eu quero que o pagamento tenha
-	o mesmo id que Pedido, por isso que no atributo do id, ele não recebe a anotação que
-	gera um numero de id automaticamente, isso é gerado pela outra classe da associação que 
-	recebe nos parametros da sua anotação o valor cascade = CascadeType.ALL*/
+	@MapsId 
+	private Pedido pedido;
 	
 	public Pagamento() {
 	}
@@ -34,7 +34,7 @@ public class Pagamento implements Serializable{
 	public Pagamento(Integer id, EstadoPagamento estadoPagamento, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estadoPagamento = estadoPagamento;
+		this.estadoPagamento = estadoPagamento.getCod();
 		this.pedido = pedido;
 	}
 
@@ -47,11 +47,11 @@ public class Pagamento implements Serializable{
 	}
 
 	public EstadoPagamento getEstadoPagamento() {
-		return estadoPagamento;
+		return EstadoPagamento.toEnum(estadoPagamento);
 	}
 
 	public void setEstadoPagamento(EstadoPagamento estadoPagamento) {
-		this.estadoPagamento = estadoPagamento;
+		this.estadoPagamento = estadoPagamento.getCod();
 	}
 
 	public Pedido getPedido() {

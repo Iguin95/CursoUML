@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 import com.cursouml.domain.enums.EstadoPagamento;
 
+import jakarta.persistence.Entity;
+
+@Entity
 public class PagamentoComBoleto extends Pagamento{
 
 	private static final long serialVersionUID = 1L;

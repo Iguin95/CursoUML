@@ -1,7 +1,7 @@
 package com.cursouml.domain;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -19,23 +21,31 @@ public class Pedido implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Instant instant;
+	private LocalDate instante;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
 	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
+	@ManyToOne
+	@JoinColumn(name = "endereco_de_entrega_id")
 	private Endereco enderecoDeEntrega; //associação direcionada. Os endereços não conhecem seus pedidos
+	
+	public Pedido() {
+	}
 
-	public Pedido(Integer id, Instant instant, Pagamento pagamento, Cliente cliente, Endereco enderecoDeEntrega) {
+	public Pedido(Integer id, LocalDate instante, Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
 		this.id = id;
-		this.instant = instant;
-		this.pagamento = pagamento;
+		this.instante = instante;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
+	//Nessa associação um p/ um, no construtor de Pedido, ele não receberá o Pagamento pois os dois serão instanciados independetemente
+	//O Pedido será instanciado primeiro e depois o Pagamento será instanciado e associado a ele
 
 	public Integer getId() {
 		return id;
@@ -45,12 +55,12 @@ public class Pedido implements Serializable{
 		this.id = id;
 	}
 
-	public Instant getInstant() {
-		return instant;
+	public LocalDate getInstant() {
+		return instante;
 	}
 
-	public void setInstant(Instant instant) {
-		this.instant = instant;
+	public void setInstant(LocalDate instante) {
+		this.instante = instante;
 	}
 
 	public Pagamento getPagamento() {
