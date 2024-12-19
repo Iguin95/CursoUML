@@ -14,9 +14,9 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) //Anotação para definir a super classe e criar as tabelas no DB...
-public abstract class Pagamento implements Serializable{ //o tipo JOINED faz com que cada classe, super e subs, tenha sua propria tabela no DB(melhor configuração para quando há muitos atributos nas subclasses)...
-	//já a SINGLE_TABLE faz ter apenas uma tabela, e dependendo da herança que escolher, os atributos da que não foi escolhida recebe todos null no DB(melhor configuração para quando há poucos atributos nas subclasses)
+@Inheritance(strategy = InheritanceType.JOINED) 
+public abstract class Pagamento implements Serializable{ 
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id

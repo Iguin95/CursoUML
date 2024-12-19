@@ -2,8 +2,10 @@ package com.cursouml.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Produto implements Serializable{
@@ -34,6 +37,9 @@ public class Produto implements Serializable{
 			)
 	List<Categoria> categorias = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	public Produto() {
 	}
 
@@ -42,6 +48,16 @@ public class Produto implements Serializable{
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+	}
+	
+	/*o Produto conhece os pedidos dele. Essa é a forma de saber quais produtos foram 
+	 * associados as seus pedidos*/
+	public List<Pedido> getPedidos(){
+		List<Pedido> listaDePedidos = new ArrayList<>();
+		for(ItemPedido x : itens) {
+			listaDePedidos.add(x.getPedido());
+		}
+		return listaDePedidos;
 	}
 
 	public Integer getId() {
@@ -70,6 +86,10 @@ public class Produto implements Serializable{
 
 	public List<Categoria> getCategorias() {
 		return categorias;
+	}
+
+	public Set<ItemPedido> getItens() {
+		return itens;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.cursouml;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
@@ -14,6 +15,7 @@ import com.cursouml.domain.Cidade;
 import com.cursouml.domain.Cliente;
 import com.cursouml.domain.Endereco;
 import com.cursouml.domain.Estado;
+import com.cursouml.domain.ItemPedido;
 import com.cursouml.domain.Pagamento;
 import com.cursouml.domain.PagamentoComBoleto;
 import com.cursouml.domain.PagamentoComCartao;
@@ -26,6 +28,7 @@ import com.cursouml.repositories.CidadeRepository;
 import com.cursouml.repositories.ClienteRepository;
 import com.cursouml.repositories.EnderecoRepository;
 import com.cursouml.repositories.EstadoRepository;
+import com.cursouml.repositories.ItemPedidoRepository;
 import com.cursouml.repositories.PagamentoRepository;
 import com.cursouml.repositories.PedidoRepository;
 import com.cursouml.repositories.ProdutoRepository;
@@ -56,6 +59,9 @@ public class CursoumlApplication implements CommandLineRunner {
 	
 	@Autowired
 	PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursoumlApplication.class, args);
@@ -106,8 +112,8 @@ public class CursoumlApplication implements CommandLineRunner {
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 		
-		Pedido ped1 = new Pedido(null, LocalDate.parse("30/09/2017 10:32", dtf), cli1, e1);
-		Pedido ped2 = new Pedido(null, LocalDate.parse("10/10/2017 19:35", dtf), cli1, e2);
+		Pedido ped1 = new Pedido(null, LocalDateTime.parse("30/09/2017 10:32", dtf), cli1, e1);
+		Pedido ped2 = new Pedido(null, LocalDateTime.parse("10/10/2017 19:35", dtf), cli1, e2);
 		
 		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
 		ped1.setPagamento(pagto1);
@@ -119,6 +125,21 @@ public class CursoumlApplication implements CommandLineRunner {
 				
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		//o Pedido conhece os seus itens de pedido
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		//o Produto conhece em quais pedidos foi requerido
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));		
 
 	}
 }

@@ -1,8 +1,10 @@
 package com.cursouml.domain;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -21,7 +24,7 @@ public class Pedido implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private LocalDate instante;
+	private LocalDateTime instante;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
@@ -32,20 +35,24 @@ public class Pedido implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "endereco_de_entrega_id")
-	private Endereco enderecoDeEntrega; //associação direcionada. Os endereços não conhecem seus pedidos
+	private Endereco enderecoDeEntrega; 
+	
+	//O Pedido conhece os itens - produtos - associados a ele
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>(); /*Produto e Pedido tem uma associação, mas ela não é feita
+	diretamente entre as classes, e sim pela classe de Associação ItemPedido (O Pedido conhece seus itens(Produto),
+	e o Produto conhece em quais Pedidos ele foi requerido(ItemPedido)*/
 	
 	public Pedido() {
 	}
 
-	public Pedido(Integer id, LocalDate instante, Cliente cliente, Endereco enderecoDeEntrega) {
+	public Pedido(Integer id, LocalDateTime instante, Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
 		this.id = id;
 		this.instante = instante;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
-	//Nessa associação um p/ um, no construtor de Pedido, ele não receberá o Pagamento pois os dois serão instanciados independetemente
-	//O Pedido será instanciado primeiro e depois o Pagamento será instanciado e associado a ele
 
 	public Integer getId() {
 		return id;
@@ -55,11 +62,11 @@ public class Pedido implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getInstant() {
+	public LocalDateTime getInstante() {
 		return instante;
 	}
 
-	public void setInstant(LocalDate instante) {
+	public void setInstante(LocalDateTime instante) {
 		this.instante = instante;
 	}
 
@@ -85,6 +92,10 @@ public class Pedido implements Serializable{
 
 	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
 		this.enderecoDeEntrega = enderecoDeEntrega;
+	}
+
+	public Set<ItemPedido> getItens() {
+		return itens;
 	}
 
 	@Override
