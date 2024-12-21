@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import com.cursouml.domain.pk.ItemPedidoPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -13,8 +14,9 @@ public class ItemPedido implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore //a partir da entidade ItemPedido faz com que nenhum dos dois lados(Pedido e Produto) sejam serializados
 	@EmbeddedId
-	private ItemPedidoPK id = new ItemPedidoPK(); //id de tipo composto
+	private ItemPedidoPK id = new ItemPedidoPK(); 
 	
 	private Double desconto;
 	private Integer quantidade;
@@ -31,10 +33,12 @@ public class ItemPedido implements Serializable{
 		this.quantidade = quantidade;
 		this.preco = preco;
 	}
-
-	public Pedido getPedido() {//Permite que o pedido e o produto sejam acessados fora da classe ItemPedido...
-		return id.getPedido();//o que melhora a semantica do código ao inves de pegar o id da classe ItemPedido...
-	}//e depois retornar os pedidos e/ou os produtos
+	
+	//esses dois próximos get, também geram referências cíciclas, porém, eu quero que o Produto apareça na serialização do meu ItemPedido
+	@JsonIgnore
+	public Pedido getPedido() {
+		return id.getPedido();
+	}
 	
 	public Produto getProduto() {
 		return id.getProduto();

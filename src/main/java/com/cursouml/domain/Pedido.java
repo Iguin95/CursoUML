@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,8 @@ public class Pedido implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime instante;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
@@ -37,11 +41,9 @@ public class Pedido implements Serializable{
 	@JoinColumn(name = "endereco_de_entrega_id")
 	private Endereco enderecoDeEntrega; 
 	
-	//O Pedido conhece os itens - produtos - associados a ele
+	//vai ser serializado normalmente - para cada Pedido será mostrado seus itens
 	@OneToMany(mappedBy = "id.pedido")
-	private Set<ItemPedido> itens = new HashSet<>(); /*Produto e Pedido tem uma associação, mas ela não é feita
-	diretamente entre as classes, e sim pela classe de Associação ItemPedido (O Pedido conhece seus itens(Produto),
-	e o Produto conhece em quais Pedidos ele foi requerido(ItemPedido)*/
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {
 	}

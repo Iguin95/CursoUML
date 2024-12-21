@@ -37,6 +37,7 @@ public class Produto implements Serializable{
 			)
 	List<Categoria> categorias = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "id.produto")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
@@ -49,9 +50,8 @@ public class Produto implements Serializable{
 		this.nome = nome;
 		this.preco = preco;
 	}
-	
-	/*o Produto conhece os pedidos dele. Essa é a forma de saber quais produtos foram 
-	 * associados as seus pedidos*/
+
+	@JsonIgnore
 	public List<Pedido> getPedidos(){
 		List<Pedido> listaDePedidos = new ArrayList<>();
 		for(ItemPedido x : itens) {

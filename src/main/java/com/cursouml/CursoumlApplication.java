@@ -61,7 +61,7 @@ public class CursoumlApplication implements CommandLineRunner {
 	PedidoRepository pedidoRepository;
 	
 	@Autowired
-	private ItemPedidoRepository itemPedidoRepository;
+	ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursoumlApplication.class, args);
@@ -130,11 +130,9 @@ public class CursoumlApplication implements CommandLineRunner {
 		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
 		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
 		
-		//o Pedido conhece os seus itens de pedido
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
 		ped2.getItens().addAll(Arrays.asList(ip3));
 		
-		//o Produto conhece em quais pedidos foi requerido
 		p1.getItens().addAll(Arrays.asList(ip1));
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
