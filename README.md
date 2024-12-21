@@ -4,7 +4,7 @@ Curso de UML com Spring Boot do professor [Nelio Alves](https://github.com/acene
 ## Modelo conceitual
 ![Modelo Conceitual](https://github.com/Iguin95/Imagens/blob/main/Modelo-Conceitual-CursoUML.png)
 
-## Enumerado
+## Enumerações
 ![Classes Enum](https://github.com/Iguin95/Imagens/blob/main/Enumerado-CursoUML.png)
 
 ## Intâncias - Diagrama de objetos
